@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit - ojslab</title>
+  <link rel="stylesheet" href="./static/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="./">ojslab</a>
+      <div class="nav-links">
+        <a href="./">Arsip</a>
+        <a href="./submit.html">Submit</a>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Kirim Artikel</h1>
+      <p>Unggah naskah beserta metadata untuk tinjauan (review).</p>
+    </section>
+    <section class="form-wrap">
+      <form id="submitForm">
+        <label>Judul <input type="text" name="title" required></label>
+        <label>Abstrak <textarea name="abstract" rows="5" required></textarea></label>
+        <label>Penulis <input type="text" name="author" placeholder="Nama penulis" required></label>
+        <label>Email <input type="email" name="email" required></label>
+        <label>Naskah (PDF/DOCX) <input type="file" name="manuscript" required></label>
+        <button type="submit">Kirim Submission</button>
+      </form>
+      <p id="result"></p>
+    </section>
+  </main>
+  <footer><p>&copy; 2026 ojslab. Original work.</p></footer>
+  <script src="./static/app.js"></script>
+</body>
+</html>

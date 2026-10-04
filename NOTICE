@@ -1,0 +1,15 @@
+ojslab - Journal System
+========================
+Copyright (C) 2026 Asruddin (Rudi) and Davy. All rights reserved.
+
+This is ORIGINAL, from-scratch software written by Rudi and Davy.
+It is NOT derived from PKP Open Journal Systems (GPL-2.0) or any
+copyleft-licensed journal engine. Portions are intended to be made the
+subject of HAKI (Hak Kekayaan Intelektual) / patent protection.
+
+Authors / right holders:
+  - Asruddin (Rudi)
+  - Davy
+
+Third-party libraries are MIT/BSD licensed, listed in LICENSES.md.
+No GPL/copyleft engine is bundled in the distributed image.
