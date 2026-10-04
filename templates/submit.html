@@ -1,0 +1,17 @@
+{{define "content"}}
+<section class="hero">
+  <h1>Kirim Artikel</h1>
+  <p>Unggah naskah beserta metadata untuk tinjauan.</p>
+</section>
+<section class="form-wrap">
+  <form method="POST" action="/submit" enctype="multipart/form-data" class="stack">
+    {{.CSRF}}
+    <label>Judul <input type="text" name="title" required></label>
+    <label>Abstrak <textarea name="abstract" rows="5" required></textarea></label>
+    <label>Penulis <input type="text" name="author" required></label>
+    <label>Naskah (PDF/DOCX) <input type="file" name="manuscript" required
+      accept=".pdf,.doc,.docx,application/pdf,application/msword"></label>
+    <button type="submit">Kirim Submission</button>
+  </form>
+</section>
+{{end}}

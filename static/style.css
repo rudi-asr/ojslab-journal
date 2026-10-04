@@ -1,0 +1,56 @@
+/* ojslab - dark default (SEE memory rule: dark is always default) */
+:root {
+  --bg: #101014;
+  --panel: #1a1a22;
+  --text: #e8e8f0;
+  --muted: #9a9aa8;
+  --accent: #3b82f6;
+  --good: #22c55e;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 24px; max-width: 960px; margin: 0 auto; width: 100%;
+}
+.brand { font-weight: 700; font-size: 1.2rem; color: var(--text); text-decoration: none; }
+.nav-links a { margin-left: 18px; color: var(--muted); text-decoration: none; }
+.nav-links a:hover { color: var(--accent); }
+main { flex: 1; max-width: 960px; margin: 0 auto; width: 100%; padding: 24px; }
+.hero { padding: 40px 0 24px; }
+.hero h1 { font-size: 2rem; margin-bottom: 8px; }
+.hero p { color: var(--muted); }
+.archive h2 { margin: 16px 0; }
+.article-list { display: grid; gap: 12px; }
+.article-card {
+  background: var(--panel); border-radius: 10px; padding: 18px;
+  border: 1px solid #2a2a34;
+}
+.article-card h3 { margin-bottom: 6px; }
+.article-card .meta { color: var(--muted); font-size: 0.9rem; }
+.article-card .status { display: inline-block; margin-top: 8px; font-size: 0.8rem;
+  padding: 2px 10px; border-radius: 99px; }
+.status.published { background: rgba(34,197,94,0.15); color: var(--good); }
+.form-wrap { max-width: 560px; }
+.form-wrap form { display: grid; gap: 14px; }
+label { display: grid; gap: 6px; color: var(--muted); }
+input, textarea {
+  background: var(--panel); border: 1px solid #2a2a34; color: var(--text);
+  border-radius: 8px; padding: 10px 12px; font: inherit;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--accent); }
+button {
+  background: var(--good); color: #07130a; border: 0; border-radius: 8px;
+  padding: 12px; font-weight: 600; cursor: pointer; font-size: 1rem;
+}
+button:hover { filter: brightness(1.08); }
+#result { margin-top: 14px; color: var(--muted); }
+footer { text-align: center; padding: 20px; color: var(--muted); font-size: 0.85rem; }

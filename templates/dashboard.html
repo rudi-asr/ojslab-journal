@@ -1,0 +1,39 @@
+{{define "content"}}
+<section class="hero">
+  <h1>Dashboard</h1>
+  <p>Masuk sebagai <strong>{{.User.Name}}</strong> ({{.User.Role}}).</p>
+</section>
+{{if eq .User.Role "author"}}
+<section class="archive">
+  <p><a class="btn" href="/submit">Kirim artikel baru</a></p>
+  <h2>Submission Saya</h2>
+  <ul class="status-list">
+    {{range .Mine}}
+      <li><strong>{{.Title}}</strong> <span class="badge status-{{.Status}}">{{.Status}}</span></li>
+    {{else}}<li>Belum ada submission.</li>{{end}}
+  </ul>
+</section>
+{{end}}
+{{if or (eq .User.Role "editor") (eq .User.Role "admin")}}
+<section class="archive">
+  <h2>Submission (semua status)</h2>
+  {{range .All}}
+    <article class="article-card">
+      <h3>{{.Title}}</h3>
+      <p class="meta">{{.Author}} &middot; {{.Email}} &middot; <span class="badge status-{{.Status}}">{{.Status}}</span></p>
+      <form method="POST" action="/review/{{.ID}}" class="inline review-form">
+        {{$.CSRF}}
+        <select name="decision">
+          <option value="in_review">In Review</option>
+          <option value="accepted">Terima</option>
+          <option value="rejected">Tolak</option>
+          <option value="published">Terbitkan</option>
+        </select>
+        <input type="text" name="note" placeholder="Catatan (opsional)">
+        <button type="submit">Simpan</button>
+      </form>
+    </article>
+  {{else}}<p>Tidak ada submission.</p>{{end}}
+</section>
+{{end}}
+{{end}}

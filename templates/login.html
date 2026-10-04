@@ -1,0 +1,14 @@
+{{define "content"}}
+<section class="hero">
+  <h1>Masuk</h1>
+  <p>Masuk untuk melanjutkan.</p>
+</section>
+<section class="form-wrap">
+  <form method="POST" action="/login" class="stack">
+    {{.CSRF}}
+    <label>Email <input type="email" name="email" required autocomplete="username"></label>
+    <label>Password <input type="password" name="password" required autocomplete="current-password"></label>
+    <button type="submit">Masuk</button>
+  </form>
+</section>
+{{end}}

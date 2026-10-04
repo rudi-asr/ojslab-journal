@@ -1,0 +1,10 @@
+{{define "content"}}
+<section class="article-full">
+  <h1>{{.A.Title}}</h1>
+  <p class="meta">{{.A.Author}}{{if .A.PublishedDate}} &middot; Publikasi {{.A.PublishedDate}}{{end}}</p>
+  <p class="meta">Status: <span class="badge status-{{.A.Status}}">{{.A.Status}}</span></p>
+  {{if .A.Volume}}<p>Volume {{.A.Volume}}{{if .A.Issue}}, Issue {{.A.Issue}}{{end}}</p>{{end}}
+  <h2>Abstrak</h2>
+  <p>{{.A.Abstract}}</p>
+</section>
+{{end}}

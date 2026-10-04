@@ -1,0 +1,33 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{.Title}}{{if .Title}} - {{end}}ojslab</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a class="brand" href="/">ojslab</a>
+      <div class="nav-links">
+        <a href="/">Arsip</a>
+        {{if .User}}
+          {{if or (eq .User.Role "editor") (eq .User.Role "admin")}}<a href="/dashboard">Dashboard</a>{{end}}
+          {{if eq .User.Role "author"}}<a href="/submit">Submit</a>{{end}}
+          <form method="POST" action="/logout" class="inline">{{.CSRF}}<button type="submit" class="link">Keluar</button></form>
+        {{else}}
+          <a href="/login">Masuk</a>
+        {{end}}
+      </div>
+    </nav>
+  </header>
+  <main>
+    {{if .Flash}}<p class="flash">{{.Flash}}</p>{{end}}
+    {{template "content" .}}
+  </main>
+  <footer><p>&copy; 2026 ojslab. Original work.</p></footer>
+</body>
+</html>
+{{end}}

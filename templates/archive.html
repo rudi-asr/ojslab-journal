@@ -1,0 +1,20 @@
+{{define "content"}}
+<section class="hero">
+  <h1>Jurnal Ilmiah</h1>
+  <p>Archive of published articles.</p>
+</section>
+<section class="archive">
+  <h2>Arsip Publikasi</h2>
+  {{if .Articles}}
+  <div class="article-list">
+    {{range .Articles}}
+    <article class="article-card">
+      <h3><a href="/article/{{.ID}}">{{.Title}}</a></h3>
+      <p class="meta">{{.Author}}{{if .PublishedDate}} &middot; Publikasi {{.PublishedDate}}{{end}}</p>
+      <p>{{.Abstract}}</p>
+    </article>
+    {{end}}
+  </div>
+  {{else}}<p>Belum ada publikasi.</p>{{end}}
+</section>
+{{end}}
