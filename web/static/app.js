@@ -4,7 +4,7 @@ const API_BASE =
   (typeof OJSLAB_API_BASE !== "undefined" && OJSLAB_API_BASE) ||
   (location.hostname === "localhost" || location.hostname.endsWith("github.io"))
     ? "http://localhost:8081"
-    : "https://api.journal.inlab.my.id";
+    : "https://ojslab-api.inlab.my.id";
 
 /* ---------- public archive (index.html) ---------- */
 const loadArchive = async () => {
