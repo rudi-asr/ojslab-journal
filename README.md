@@ -10,11 +10,14 @@ is written from zero (Go stdlib + vanilla JS) so the codebase is original
 provenance for IP claims. No GPL/copyleft engine is bundled.
 
 ## Stack
-- Backend: Go (stdlib net/http), PostgreSQL 17, JWT/HMAC stateless auth
-- Frontend: static HTML + vanilla JS on GitHub Pages
+- Backend: Go (stdlib net/http), PostgreSQL 17, **SSR** (html/template), scs cookie
+  session (pgxstore), gorilla/csrf, bcrypt. Single origin, OWASP-hardened.
+- Frontend: static landing on GitHub Pages; the app itself is server-rendered
+  (no separate JSON API, no CORS, no client-held tokens).
 - Deploy: LXC 206 `23-ojs-jurnal` on serverkita (192.168.1.23 / ::123)
-- Routing: Cloudflare Tunnel + nginx (rproxy 101); frontend Pages, backend API
-- Arch mirror of InovasiLab-LMS: `web/` -> Pages, backend in LXC, one repo
+- Routing: landing `journal.inlab.my.id` (Pages) + app `ojslab-api.inlab.my.id`
+  (Cloudflare Tunnel -> nginx rproxy 101 -> LXC 206)
+- Arch mirror of InovasiLab-LMS: `web/` -> Pages landing, app is one SSR origin.
 
 ## Layout
 ```
@@ -27,7 +30,7 @@ docs/           architecture + IP/provenance notes
 - Article submission (author uploads manuscript + metadata)
 - Review workflow (submitted -> in-review -> accepted/rejected)
 - Public archive of published articles
-- Contributor/editor auth; JWT stateless
+- Contributor/editor auth; cookie session + CSRF (SSR)
 
 ## Local / deploy
 Backend target lives at `/opt/ojs` inside LXC 206 (systemd `ojslab.service`,
