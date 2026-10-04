@@ -21,6 +21,7 @@
     <article class="article-card">
       <h3>{{.Title}}</h3>
       <p class="meta">{{.Author}} &middot; {{.Email}} &middot; <span class="badge status-{{.Status}}">{{.Status}}</span></p>
+      {{if .HasFile}}<p><a class="btn-sm" href="/files/{{.ID}}" rel="noopener">Unduh Naskah</a></p>{{end}}
       <form method="POST" action="/review/{{.ID}}" class="inline review-form">
         {{$.CSRF}}
         <select name="decision">

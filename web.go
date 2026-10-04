@@ -318,7 +318,8 @@ func (s *server) dashboard(w http.ResponseWriter, r *http.Request) {
 	}
 	// editor/admin: all articles for review
 	rows, err := s.pool.Query(r.Context(),
-		`SELECT id,title,abstract,author,email,status FROM articles ORDER BY created_at DESC`)
+		`SELECT id,title,abstract,author,email,status,manuscript_path IS NOT NULL
+		 FROM articles ORDER BY created_at DESC`)
 	if err != nil {
 		http.Error(w, "query failed", http.StatusInternalServerError)
 		return
@@ -327,7 +328,7 @@ func (s *server) dashboard(w http.ResponseWriter, r *http.Request) {
 	var all []Article
 	for rows.Next() {
 		var a Article
-		if rows.Scan(&a.ID, &a.Title, &a.Abstract, &a.Author, &a.Email, &a.Status) == nil {
+		if rows.Scan(&a.ID, &a.Title, &a.Abstract, &a.Author, &a.Email, &a.Status, &a.HasFile) == nil {
 			all = append(all, a)
 		}
 	}
@@ -364,6 +365,52 @@ func (s *server) review(w http.ResponseWriter, r *http.Request) {
 		 VALUES($1,$2,$3,$4,$5)`, id, from, to, note, u.Email)
 	s.flash(r, "Status artikel #"+strconv.FormatInt(id, 10)+" -> "+to)
 	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+}
+
+// ---------- serve manuscript (editor/admin) ----------
+func (s *server) serveFile(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.ParseInt(r.PathValue("id"), 10, 64)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	var path string
+	err = s.pool.QueryRow(r.Context(),
+		`SELECT manuscript_path FROM articles WHERE id=$1 AND manuscript_path IS NOT NULL`, id).Scan(&path)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	// resolve within dataDir only; block traversal
+	clean := filepath.Clean(path)
+	if strings.HasPrefix(clean, "..") || strings.Contains(clean, "../") || filepath.IsAbs(clean) {
+		http.Error(w, "invalid path", http.StatusBadRequest)
+		return
+	}
+	full := filepath.Join(s.dataDir, clean)
+	f, err := os.Open(full)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	defer f.Close()
+	name := filepath.Base(clean)
+	w.Header().Set("Content-Disposition", "attachment; filename=\""+name+"\"")
+	w.Header().Set("Content-Type", contentTypeFor(name))
+	w.Header().Set("Cache-Control", "no-store")
+	_, _ = io.Copy(w, f)
+}
+
+func contentTypeFor(name string) string {
+	switch filepath.Ext(name) {
+	case ".pdf":
+		return "application/pdf"
+	case ".doc":
+		return "application/msword"
+	case ".docx":
+		return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+	}
+	return "application/octet-stream"
 }
 
 // ---------- middleware ----------

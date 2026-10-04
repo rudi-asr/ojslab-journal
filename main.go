@@ -44,6 +44,7 @@ type Article struct {
 	Issue         *string
 	PublishedDate *string
 	ReviewNote    string
+	HasFile       bool
 }
 
 func main() {
@@ -65,8 +66,10 @@ func main() {
 	}
 	log.Printf("migrations OK")
 
-	if em := os.Getenv("OJS_EDITOR_EMAIL"); em != "" {
-		seedEditor(ctx, pool, em, os.Getenv("OJS_EDITOR_PASSWORD"))
+	if os.Getenv("OJS_SEED_EDITOR") == "1" {
+		if em := os.Getenv("OJS_EDITOR_EMAIL"); em != "" {
+			seedEditor(ctx, pool, em, os.Getenv("OJS_EDITOR_PASSWORD"))
+		}
 	}
 
 	dataDir := os.Getenv("OJS_DATA")
@@ -98,9 +101,11 @@ func runMigrations(ctx context.Context, pool *pgxpool.Pool) error {
 
 func seedEditor(ctx context.Context, pool *pgxpool.Pool, email, pw string) {
 	hash, _ := bcrypt.GenerateFromPassword([]byte(pw), bcrypt.DefaultCost)
+	// only create if absent - never force-promote an existing account on boot
 	_, err := pool.Exec(ctx,
-		`INSERT INTO users(email,password_hash,name,role) VALUES($1,$2,'Editor','admin')
-		 ON CONFLICT (email) DO UPDATE SET role='admin'`, email, string(hash))
+		`INSERT INTO users(email,password_hash,name,role)
+		 SELECT $1,$2,'Editor','admin'
+		 WHERE NOT EXISTS (SELECT 1 FROM users WHERE email=$1)`, email, string(hash))
 	if err != nil {
 		log.Printf("seed editor: %v", err)
 	}
@@ -145,6 +150,7 @@ func (s *server) routes() http.Handler {
 
 	mux.HandleFunc("GET /dashboard", s.loginRequired(s.dashboard))
 	mux.HandleFunc("POST /review/{id}", s.editorRequired(s.review))
+	mux.HandleFunc("GET /files/{id}", s.editorRequired(s.serveFile))
 
 	var h http.Handler = mux
 	h = s.secureHeaders(h)
