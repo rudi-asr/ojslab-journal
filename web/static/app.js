@@ -2,9 +2,9 @@
    API base is configurable: localhost for dev, public tunnel for prod. */
 const API_BASE =
   (typeof OJSLAB_API_BASE !== "undefined" && OJSLAB_API_BASE) ||
-  location.hostname === "localhost" || location.hostname.endsWith("github.io")
+  (location.hostname === "localhost" || location.hostname.endsWith("github.io"))
     ? "http://localhost:8081"
-    : "https://api.journal.rudilab.my.id";
+    : "https://api.journal.inlab.my.id";
 
 /* ---------- public archive (index.html) ---------- */
 const loadArchive = async () => {
